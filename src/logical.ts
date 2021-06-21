@@ -1,7 +1,8 @@
-const files = require("./files")
-const helpers = require("./helpers")
+import files from "./files";
+import helpers from "./helpers";
+
 export default {
-    writeProvider(path: string, singular: String, plural: string) {
+    writeProvider(path: string, singular: string, plural: string) {
         files.writeFile(path, `
 import { ${helpers.capitalize(singular)} } from './entities/${singular}.entity';
 
@@ -11,9 +12,7 @@ export const ${plural}Providers = [
         useValue: ${helpers.capitalize(singular)},
     },
 ];
-        `, (err: any) => {
-            if (err) console.log(err)
-        })
+        `)
     },
     writeService(path: string, singular: string, plural: string, className: string) {
         files.writeFile(path, `
@@ -35,9 +34,7 @@ export class ${helpers.capitalize(plural)}Service extends ${className}<
     super(${plural});
   }
 }
-`, (err: any) => {
-            if (err) console.log(err)
-        })
+`)
 
     },
     writeEntity(path: string, singular: string, fields: any[]) {
@@ -57,10 +54,7 @@ import { Base } from '../../../databases/entities/base';
 })
 export class ${helpers.capitalize(singular)} extends Base<${helpers.capitalize(singular)}> {
   ${fieldsGenerated}
-}`,
-            (err: any) => {
-                if (err) console.log(err)
-            })
+}`)
 
     },
     writeCreateDto(path: string, singular: string, fields: any[]) {
@@ -85,10 +79,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class Create${helpers.capitalize(singular)}Dto  {
     ${fieldsGenerated}
 }
-        `,
-            (err: any) => {
-                if (err) console.log(err)
-            })
+        `,)
 
     },
     writeUpdateDto(path: string, singular: string) {
@@ -104,20 +95,14 @@ export class Update${helpers.capitalize(singular)}Dto extends Create${helpers.ca
     createdAt?: string;
     updatedAt?: string;
 }
-        `,
-            (err: any) => {
-                if (err) console.log(err)
-            })
+        `)
 
     },
     async writeModule(path: string, plural: string) {
-        let content = await files.readFile(path)
+        let content: string = await files.readFile(path)
         content = content.replace(/.controller';/g, `.controller';
 import { ${plural}Providers } from './${plural}.provider';`)
         content = content.replace(/Service\]/g, `Service,...${plural}Providers]`)
-        files.writeFile(path, content,
-            (err: any) => {
-                if (err) console.log(err)
-            })
+        files.writeFile(path, content)
     }
 }

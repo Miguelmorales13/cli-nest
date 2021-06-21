@@ -1,6 +1,7 @@
-const fs = require("fs")
+import fs from "fs"
+
 export default {
-    readFile(path: string) {
+    readFile(path: string): Promise<string> {
         console.log(path)
         return new Promise((resolve, reject) => {
             fs.readFile(path, "utf8", function (err: any, content: string) {

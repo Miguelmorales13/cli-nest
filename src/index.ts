@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import inquirer from "inquirer";
 import * as path from "path"
+import logical from "./logical";
 
-const logical = require("./logical");
 const info = inquirer.prompt([
     {
         name: "crudClass",

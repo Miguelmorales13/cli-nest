@@ -16,4 +16,4 @@ you can use this app after install global model
 cli-nest
 
 
-v 1.0.7
+v 1.0.8
