@@ -1,12 +1,31 @@
 {
   "name": "cli-nest",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "1.0.7",
+  "main": "dist/index.js",
+  "bin": {
+    "cli-nest": "dist/index.js"
+  },
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "prepare": "yarn build",
+    "build": "tsc",
+    "upload": "npm publish",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "inquirer": "^8.1.1"
-  }
+  },
+  "devDependencies": {
+    "@types/inquirer": "^7.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Miguelmorales13/cli-nest.git"
+  },
+  "author": "Miguel Angel Morales",
+  "bugs": {
+    "url": "https://github.com/Miguelmorales13/cli-nest/issues"
+  },
+  "homepage": "https://github.com/Miguelmorales13/cli-nest#readme",
+  "description": ""
 }

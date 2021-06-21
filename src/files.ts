@@ -1,18 +1,18 @@
 const fs = require("fs")
-module.exports = {
-    readFile(path) {
+export default {
+    readFile(path: string) {
         console.log(path)
         return new Promise((resolve, reject) => {
-            fs.readFile(path, "utf8", function (err, content) {
+            fs.readFile(path, "utf8", function (err: any, content: string) {
                 if (err) return reject(err)
                 resolve(content)
             })
 
         })
     },
-    writeFile(path, content) {
+    writeFile(path: string, content: string) {
         return new Promise((resolve, reject) => {
-            fs.writeFile(path, content, function (err) {
+            fs.writeFile(path, content, function (err: any) {
                 if (err) return reject(err)
                 resolve(true)
 

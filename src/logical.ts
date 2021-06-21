@@ -1,7 +1,7 @@
 const files = require("./files")
 const helpers = require("./helpers")
-module.exports = {
-    writeProvider(path, singular, plural) {
+export default {
+    writeProvider(path: string, singular: String, plural: string) {
         files.writeFile(path, `
 import { ${helpers.capitalize(singular)} } from './entities/${singular}.entity';
 
@@ -11,11 +11,11 @@ export const ${plural}Providers = [
         useValue: ${helpers.capitalize(singular)},
     },
 ];
-        `, (err) => {
+        `, (err: any) => {
             if (err) console.log(err)
         })
     },
-    writeService(path,singular,plural,className){
+    writeService(path: string, singular: string, plural: string, className: string) {
         files.writeFile(path, `
 import { Inject, Injectable } from '@nestjs/common';
 import { Create${helpers.capitalize(singular)}Dto } from './dto/create-${singular}.dto';
@@ -35,15 +35,15 @@ export class ${helpers.capitalize(plural)}Service extends ${className}<
     super(${plural});
   }
 }
-`,(err) => {
-    if (err) console.log(err)
-})
+`, (err: any) => {
+            if (err) console.log(err)
+        })
 
     },
-    writeEntity(path,singular,fields){
-        const fieldsGenerated=fields.map(field=>{
+    writeEntity(path: string, singular: string, fields: any[]) {
+        const fieldsGenerated = fields.map(field => {
             return `
-    @Column${fields.required?'({allowNull:false})':''}
+    @Column${field.required ? '({allowNull:false})' : ''}
     ${field.field}?: ${field.type};`
         }).join("")
         files.writeFile(path, `
@@ -58,27 +58,27 @@ import { Base } from '../../../databases/entities/base';
 export class ${helpers.capitalize(singular)} extends Base<${helpers.capitalize(singular)}> {
   ${fieldsGenerated}
 }`,
-(err) => {
-    if (err) console.log(err)
-})      
+            (err: any) => {
+                if (err) console.log(err)
+            })
 
     },
-    writeCreateDto(path,singular,fields){
-        const hasRequiredNumber=fields.find(field=>field.required&&field.type=='number')
-        const hasRequiredString=fields.find(field=>field.required&&field.type=='string')
-        const hasRequiredBoolean=fields.find(field=>field.required&&field.type=='boolean')
-        const fieldsGenerated=fields.map(field=>{
+    writeCreateDto(path: string, singular: string, fields: any[]) {
+        const hasRequiredNumber = fields.find(field => field.required && field.type == 'number')
+        const hasRequiredString = fields.find(field => field.required && field.type == 'string')
+        const hasRequiredBoolean = fields.find(field => field.required && field.type == 'boolean')
+        const fieldsGenerated = fields.map(field => {
             return `
-    ${field.required? '@Is'+helpers.capitalize(field.type)+'()':''}
+    ${field.required ? '@Is' + helpers.capitalize(field.type) + '()' : ''}
     @ApiProperty()
     ${field.field}?: ${field.type};`
         }).join("")
         files.writeFile(path, `
 import { Create${helpers.capitalize(singular)}Dto } from './create-${singular}.dto';
 import { 
-    ${hasRequiredNumber?'IsNumber,':''}
-    ${hasRequiredString?'IsString,':''}
-    ${hasRequiredBoolean?'IsBoolean':''} 
+    ${hasRequiredNumber ? 'IsNumber,' : ''}
+    ${hasRequiredString ? 'IsString,' : ''}
+    ${hasRequiredBoolean ? 'IsBoolean' : ''} 
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -86,12 +86,12 @@ export class Create${helpers.capitalize(singular)}Dto  {
     ${fieldsGenerated}
 }
         `,
-(err) => {
-    if (err) console.log(err)
-})      
+            (err: any) => {
+                if (err) console.log(err)
+            })
 
     },
-    writeUpdateDto(path,singular){
+    writeUpdateDto(path: string, singular: string) {
         files.writeFile(path, `
 import { Create${helpers.capitalize(singular)}Dto } from './create-${singular}.dto';
 import { IsNumber } from 'class-validator';
@@ -105,19 +105,19 @@ export class Update${helpers.capitalize(singular)}Dto extends Create${helpers.ca
     updatedAt?: string;
 }
         `,
-(err) => {
-    if (err) console.log(err)
-})      
+            (err: any) => {
+                if (err) console.log(err)
+            })
 
     },
-    async writeModule(path,plural){
+    async writeModule(path: string, plural: string) {
         let content = await files.readFile(path)
-        content =content.replace(/.controller';/g, `.controller';
+        content = content.replace(/.controller';/g, `.controller';
 import { ${plural}Providers } from './${plural}.provider';`)
-        content =content.replace(/Service\]/g, `Service,...${plural}Providers]`)
+        content = content.replace(/Service\]/g, `Service,...${plural}Providers]`)
         files.writeFile(path, content,
-        (err) => {
-            if (err) console.log(err)
-        }) 
+            (err: any) => {
+                if (err) console.log(err)
+            })
     }
 }
