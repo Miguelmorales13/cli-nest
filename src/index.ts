@@ -71,15 +71,15 @@ const generateQuestion = async () => {
     return await inquirer.prompt(questions)
 }
 const init = async () => {
-    const {path: pathRelattive, pluralObject, singularObject, crudClass} = await info
+    const {path: pathRelative, pluralObject, singularObject, crudClass} = await info
     // console.log(configuration)
     const fields = await generate()
-    logical.writeProvider(path.join(pathRelattive, `${pluralObject}.provider.ts`), singularObject, pluralObject)
-    logical.writeService(path.join(pathRelattive, `${pluralObject}.service.ts`), singularObject, pluralObject, crudClass)
-    logical.writeEntity(path.join(pathRelattive, 'entities', `${singularObject}.entity.ts`), singularObject, fields)
-    logical.writeCreateDto(path.join(pathRelattive, 'dto', `create-${singularObject}.dto.ts`), singularObject, fields)
-    logical.writeUpdateDto(path.join(pathRelattive, 'dto', `update-${singularObject}.dto.ts`), singularObject)
-    logical.writeModule(path.join(pathRelattive, `${pluralObject}.module.ts`), pluralObject)
+    logical.writeProvider(path.join(process.cwd(), pathRelative, `${pluralObject}.provider.ts`), singularObject, pluralObject)
+    logical.writeService(path.join(process.cwd(), pathRelative, `${pluralObject}.service.ts`), singularObject, pluralObject, crudClass)
+    logical.writeEntity(path.join(process.cwd(), pathRelative, 'entities', `${singularObject}.entity.ts`), singularObject, fields)
+    logical.writeCreateDto(path.join(process.cwd(), pathRelative, 'dto', `create-${singularObject}.dto.ts`), singularObject, fields)
+    logical.writeUpdateDto(path.join(process.cwd(), pathRelative, 'dto', `update-${singularObject}.dto.ts`), singularObject)
+    await logical.writeModule(path.join(process.cwd(), pathRelative, `${pluralObject}.module.ts`), pluralObject)
     // const fileContent = await files.readFile(path.join(`${configuration.path}${configuration.pluralObject}.controller.ts`))
     // console.log(fileContent)
     // files.writeFile(path.join(`${configuration.path}${configuration.pluralObject}.provider.ts`), "kjdsbfuhdsvbuhfsdvbiuhfbdsihbfuysdbfyubvuysdbfyubdsyufbyu")
